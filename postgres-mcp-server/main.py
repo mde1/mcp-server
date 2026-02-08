@@ -61,6 +61,31 @@ async def list_tables() -> List[str]:
             rows = [r[0] for r in cur.fetchall()]
     return rows
 
+@mcp.tool()
+async def execute_sql(sql: str) -> List[Dict]:
+    """Execute a SQL query and return the results."""
+    with psycopg2.connect(**DB_CONFIG) as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql)
+            rows = [{"column": r[0], "type": r[1]} for r in cur.fetchall()]
+    return rows
+
+@mcp.tool()
+async def get_five_newest_users() -> List[Dict]:
+    """Return the five newest users in the database."""
+    sql = """
+        SELECT *
+        FROM users
+        ORDER BY created_at DESC
+        LIMIT 5
+    """
+    with psycopg2.connect(**DB_CONFIG) as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql)
+            rows = [{"user": r[0], "email": r[1], "created_at": r[2]} for r in cur.fetchall()]
+    return rows
+
+
 def main():
     # Run MCP server using stdio transport for AI assistant integration
     mcp.run(transport="stdio")
