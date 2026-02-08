@@ -3,6 +3,9 @@ import os
 import psycopg2
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
+import sys
+print("PYTHON EXEC:", sys.executable)
+print("PYTHON VERSION:", sys.version)
 
 # Load environment variables from .env file
 load_dotenv()
