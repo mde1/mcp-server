@@ -15,11 +15,11 @@ mcp = FastMCP("postgres-server")
 
 # Database connection configuration from environment variables
 DB_CONFIG = {
-    "dbname": os.getenv("DB_NAME", "practice_db"),
-    "user": os.getenv("DB_USER", "postgres"),
-    "password": os.getenv("DB_PASSWORD", "password123"),
-    "host": os.getenv("DB_HOST", "localhost"),
-    "port": os.getenv("DB_PORT", "5432"),
+    "dbname": os.getenv("DB_NAME"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+    "host": os.getenv("DB_HOST"),
+    "port": os.getenv("DB_PORT"),
 }
 
 # TODO: Implement a second MCP tool called `execute_sql`
@@ -79,7 +79,7 @@ async def get_five_newest_users() -> List[Dict]:
     sql = """
         SELECT *
         FROM users
-        ORDER BY created_at DESC
+        ORDER BY signup_date DESC
         LIMIT 5
     """
     with psycopg2.connect(**DB_CONFIG) as conn:
