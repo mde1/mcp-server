@@ -47,6 +47,20 @@ async def get_schema(table: str) -> List[Dict]:
             rows = [{"column": r[0], "type": r[1]} for r in cur.fetchall()]
     return rows
 
+@mcp.tool()
+async def list_tables() -> List[str]:
+    """Return the list of table names available in the current database."""
+    sql = """
+        SELECT table_name
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+    """
+    with psycopg2.connect(**DB_CONFIG) as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql)
+            rows = [r[0] for r in cur.fetchall()]
+    return rows
+
 def main():
     # Run MCP server using stdio transport for AI assistant integration
     mcp.run(transport="stdio")
